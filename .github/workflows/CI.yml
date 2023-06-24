@@ -34,6 +34,6 @@ jobs:
       - uses: julia-actions/cache@v1
       - uses: julia-actions/julia-buildpkg@v1
       - uses: julia-actions/julia-runtest@v1
-      - name: Run Julia tests
+      - name: Run Julia Benchmark
         run: |
-          julia --project=. src/benchmarks.jl
+          julia --project=. -e 'using benchmarks; benchmarks.benchmark_all()'
