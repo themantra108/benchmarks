@@ -2,60 +2,43 @@ module benchmarks
 
 using BenchmarkTools
 
+# Execute a Python script from Julia
+function run_python_script(script_path::AbstractString)
+    cmd = `python $script_path`
+    run(cmd)
+end
+
+# Benchmark Hello World script for a specific language
 function run_hello_world_benchmark(language::String, extension::String)
     script_path = "script/$language/helloworld.$extension"
     if isfile(script_path)
-        @info "Benchmarking $language Hello World:"
-        @benchmark run(`$language $script_path`)
+        if language == "rust"
+            @info "Benchmarking $language Hello World:"
+            @benchmark run(`rustc --crate-name helloworld $script_path -o script/$language/helloworld`) setup=(BenchmarkTools.compilecache())
+            @benchmark run(`script/$language/helloworld`) setup=(BenchmarkTools.compilecache())
+        elseif language == "julia"
+            @info "Benchmarking $language Hello World:"
+            @benchmark run(`julia --project=. $script_path`) setup=(BenchmarkTools.compilecache())
+        elseif language == "python"
+            @info "Benchmarking $language Hello World:"
+            @benchmark run_python_script(script_path) setup=(BenchmarkTools.compilecache())
+        else
+            @info "Benchmarking $language Hello World:"
+            @benchmark run(`$language $script_path`) setup=(BenchmarkTools.compilecache())
+        end
     else
         @warn "No Hello World script found for $language"
     end
 end
 
-function run_fibonacci_benchmark(language::String, extension::String)
-    script_path = "script/$language/fibonacci.$extension"
-    if isfile(script_path)
-        @info "Benchmarking $language Fibonacci:"
-        @benchmark run(`$language $script_path`)
-    else
-        @warn "No Fibonacci script found for $language"
-    end
-end
-
-function run_mandelbrot_benchmark(language::String, extension::String)
-    script_path = "script/$language/mandelbrot.$extension"
-    if isfile(script_path)
-        @info "Benchmarking $language Mandelbrot:"
-        @benchmark run(`$language $script_path`)
-    else
-        @warn "No Mandelbrot script found for $language"
-    end
-end
-
+# Benchmark all Hello World scripts
 function benchmark_all()
-    languages = readdir("script")
-    for language in languages
-        extension = get_file_extension(language)
-        if !isempty(extension)
-            run_hello_world_benchmark(language, extension)
-            run_fibonacci_benchmark(language, extension)
-            run_mandelbrot_benchmark(language, extension)
-        else
-            @warn "Unsupported language: $language"
-        end
+    languages = ["julia", "python", "go", "rust"]
+    extensions = ["jl", "py", "go", "rs"]
+
+    for (language, extension) in zip(languages, extensions)
+        run_hello_world_benchmark(language, extension)
     end
 end
 
-function get_file_extension(language::String)
-    if language == "go"
-        return "go"
-    elseif language == "rust"
-        return "rs"
-    elseif language == "python"
-        return "py"
-    else
-        return ""
-    end
-end
-
-end
+end  # module benchmarks
