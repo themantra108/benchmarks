@@ -6,7 +6,7 @@ function run_hello_world_benchmark(language::String, extension::String)
     script_path = "script/$language/helloworld.$extension"
     if isfile(script_path)
         @info "Benchmarking $language Hello World:"
-        @benchmark run(`$language $script_path`) setup=(BenchmarkTools.compilecache())
+        @benchmark run(`$language $script_path`)
     else
         @warn "No Hello World script found for $language"
     end
@@ -16,7 +16,7 @@ function run_fibonacci_benchmark(language::String, extension::String)
     script_path = "script/$language/fibonacci.$extension"
     if isfile(script_path)
         @info "Benchmarking $language Fibonacci:"
-        @benchmark run(`$language $script_path`) setup=(BenchmarkTools.compilecache())
+        @benchmark run(`$language $script_path`)
     else
         @warn "No Fibonacci script found for $language"
     end
@@ -26,7 +26,7 @@ function run_mandelbrot_benchmark(language::String, extension::String)
     script_path = "script/$language/mandelbrot.$extension"
     if isfile(script_path)
         @info "Benchmarking $language Mandelbrot:"
-        @benchmark run(`$language $script_path`) setup=(BenchmarkTools.compilecache())
+        @benchmark run(`$language $script_path`)
     else
         @warn "No Mandelbrot script found for $language"
     end
