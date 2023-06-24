@@ -2,39 +2,60 @@ module benchmarks
 
 using BenchmarkTools
 
-# Benchmark function for running a command and measuring its execution time
-function benchmark_run_command(command::AbstractString)
-    cmd = Cmd(command)
-    result = @timed run(cmd; wait = true)
-    return result
-end
-
-
-# Function to run the Hello World benchmarks for a specific language
-function run_hello_world_benchmarks(language::AbstractString)
-    script_folder = "script"
-    folder = joinpath(script_folder, language)
-
-    file_paths = readdir(folder)
-    for file_path in file_paths
-        full_path = joinpath(folder, file_path)
-
-        println("Benchmarking $language Hello World:")
-        benchmark_result = benchmark_run_command(full_path)
-        println(benchmark_result)
+function run_hello_world_benchmark(language::String, extension::String)
+    script_path = "script/$language/helloworld.$extension"
+    if isfile(script_path)
+        @info "Benchmarking $language Hello World:"
+        @benchmark run(`$language $script_path`) setup=(BenchmarkTools.compilecache())
+    else
+        @warn "No Hello World script found for $language"
     end
 end
 
-# Function to run all benchmarks
+function run_fibonacci_benchmark(language::String, extension::String)
+    script_path = "script/$language/fibonacci.$extension"
+    if isfile(script_path)
+        @info "Benchmarking $language Fibonacci:"
+        @benchmark run(`$language $script_path`) setup=(BenchmarkTools.compilecache())
+    else
+        @warn "No Fibonacci script found for $language"
+    end
+end
+
+function run_mandelbrot_benchmark(language::String, extension::String)
+    script_path = "script/$language/mandelbrot.$extension"
+    if isfile(script_path)
+        @info "Benchmarking $language Mandelbrot:"
+        @benchmark run(`$language $script_path`) setup=(BenchmarkTools.compilecache())
+    else
+        @warn "No Mandelbrot script found for $language"
+    end
+end
+
 function benchmark_all()
-    languages = ["julia", "python", "rust", "go"]
-
-    println("Running Hello World Benchmarks:")
+    languages = readdir("script")
     for language in languages
-        run_hello_world_benchmarks(language)
+        extension = get_file_extension(language)
+        if !isempty(extension)
+            run_hello_world_benchmark(language, extension)
+            run_fibonacci_benchmark(language, extension)
+            run_mandelbrot_benchmark(language, extension)
+        else
+            @warn "Unsupported language: $language"
+        end
     end
+end
 
-    println("All benchmarks completed.")
+function get_file_extension(language::String)
+    if language == "go"
+        return "go"
+    elseif language == "rust"
+        return "rs"
+    elseif language == "python"
+        return "py"
+    else
+        return ""
+    end
 end
 
 end
