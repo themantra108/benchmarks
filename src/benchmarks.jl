@@ -10,7 +10,7 @@ end
 
 # Benchmark Hello World script for a specific language
 function run_hello_world_benchmark(language::String, extension::String)
-    script_path = "script/$language/helloworld.$extension"
+    script_path = joinpath("script", language, "helloworld.$extension")
     if isfile(script_path)
         @info "Benchmarking $language Hello World:"
         if language == "rust"
