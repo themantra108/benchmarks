@@ -4,9 +4,11 @@ using BenchmarkTools
 
 # Benchmark function for running a command and measuring its execution time
 function benchmark_run_command(command::AbstractString)
-    result = @timed run(command; wait = true)
+    cmd = Cmd(command)
+    result = @timed run(cmd; wait = true)
     return result
 end
+
 
 # Function to run the Hello World benchmarks for a specific language
 function run_hello_world_benchmarks(language::AbstractString)
