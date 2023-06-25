@@ -1,11 +1,13 @@
 module benchmarks
+
 export run_command
-# Write your package code here.
-# benchmarks.jl
 
 function run_rust()
+    # Specify the path to hello_world.rs
+    rust_file = joinpath(@__DIR__, "hello_world.rs")
+
     # Build Rust program
-    cmd = `rustc hello_world.rs`
+    cmd = `rustc $rust_file`
     run(cmd)
     
     # Execute Rust program
@@ -34,14 +36,13 @@ function run_julia()
     cmd = `julia hello_world.jl`
     run(cmd)
 end
+
 function run_command()
     # Run benchmarks
-@time run_rust()
-@time run_go()
-@time run_python()
-@time run_julia()
+    @time run_rust()
+    @time run_go()
+    @time run_python()
+    @time run_julia()
 end
 
-
-
-end
+end  # module benchmarks
