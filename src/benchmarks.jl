@@ -53,3 +53,5 @@ function run_command()
     @time run_python()
     @time run_julia()
 end
+
+end  # module benchmarks
