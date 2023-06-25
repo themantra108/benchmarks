@@ -2,56 +2,53 @@ module benchmarks
 
 export run_command
 
-function run_rust()
-    # Specify the path to hello_world.rs
-    rust_file = joinpath(@__DIR__, "rust", "hello_world.rs")
-
-    # Build Rust program
-    cmd = `rustc $rust_file`
-    run(cmd)
-    
-    # Execute Rust program
-    cmd = `./hello_world`
-    run(cmd)
+function build_languages(languages::Vector{String})
+    for language in languages
+        folder = joinpath(@__DIR__, language)
+        for file in readdir(folder)
+            path = joinpath(folder, file)
+            if !isdir(path)
+                if language == "rust"
+                    cmd = `rustc $path`
+                    run(cmd)
+                elseif language == "go"
+                    cmd = `go build $path`
+                    run(cmd)
+                end
+            end
+        end
+    end
 end
 
-function run_go()
-    # Specify the path to hello_world.go
-    go_file = joinpath(@__DIR__, "go", "hello_world.go")
-    
-    # Build Go program
-    cmd = `go build $go_file`
-    run(cmd)
-    
-    # Execute Go program
-    cmd = `./hello_world`
-    run(cmd)
-end
-
-function run_python()
-    # Specify the path to hello_world.py
-    python_file = joinpath(@__DIR__, "python", "hello_world.py")
-    
-    # Execute Python program
-    cmd = `python $python_file`
-    run(cmd)
-end
-
-function run_julia()
-    # Specify the path to hello_world.jl
-    julia_file = joinpath(@__DIR__, "julia", "hello_world.jl")
-    
-    # Execute Julia program
-    cmd = `julia $julia_file`
-    run(cmd)
+function run_languages(languages::Vector{String})
+    for language in languages
+        folder = joinpath(@__DIR__, language)
+        for file in readdir(folder)
+            path = joinpath(folder, file)
+            if !isdir(path)
+                if language == "rust"
+                    cmd = `./$(basename(file, ".rs"))`
+                    run(cmd)
+                elseif language == "go"
+                    cmd = `./$(basename(file, ".go"))`
+                    run(cmd)
+                elseif language == "python"
+                    cmd = `python $path`
+                    run(cmd)
+                elseif language == "julia"
+                    cmd = `julia $path`
+                    run(cmd)
+                end
+            end
+        end
+    end
 end
 
 function run_command()
-    # Run benchmarks
-    @time run_rust()
-    @time run_go()
-    @time run_python()
-    @time run_julia()
+    languages = ["rust", "go", "python", "julia"]
+
+    @time build_languages(languages)
+    @time run_languages(languages)
 end
 
 end  # module benchmarks
