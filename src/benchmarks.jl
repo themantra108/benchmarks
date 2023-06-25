@@ -1,4 +1,4 @@
-module Benchmarks
+module benchmarks
 
 # Write your package code here.
 # benchmarks.jl
