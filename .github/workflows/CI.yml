@@ -34,3 +34,6 @@ jobs:
       - uses: julia-actions/cache@v1
       - uses: julia-actions/julia-buildpkg@v1
       # - uses: julia-actions/julia-runtest@v1
+      - name: Build and run benchmarks
+        run: |
+          julia benchmarks.jl
