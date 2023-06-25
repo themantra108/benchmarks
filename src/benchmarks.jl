@@ -12,28 +12,37 @@ function run_rust()
     
     # Execute Rust program
     cmd = `./hello_world`
-    run(cmd)
+    run(joinpath(@__DIR__, cmd))
 end
 
 function run_go()
+    # Specify the path to hello_world.go
+    go_file = joinpath(@__DIR__, "hello_world.go")
+    
     # Build Go program
-    cmd = `go build hello_world.go`
+    cmd = `go build $go_file`
     run(cmd)
     
     # Execute Go program
     cmd = `./hello_world`
-    run(cmd)
+    run(joinpath(@__DIR__, cmd))
 end
 
 function run_python()
+    # Specify the path to hello_world.py
+    python_file = joinpath(@__DIR__, "hello_world.py")
+    
     # Execute Python program
-    cmd = `python hello_world.py`
+    cmd = `python $python_file`
     run(cmd)
 end
 
 function run_julia()
+    # Specify the path to hello_world.jl
+    julia_file = joinpath(@__DIR__, "hello_world.jl")
+    
     # Execute Julia program
-    cmd = `julia hello_world.jl`
+    cmd = `julia $julia_file`
     run(cmd)
 end
 
