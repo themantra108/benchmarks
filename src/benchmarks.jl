@@ -44,7 +44,7 @@ function run_command()
     # Run benchmarks
     @time run_rust()
     # @time run_go()
-    # @time run_python()
+    @time run_python()
     
 end
 
