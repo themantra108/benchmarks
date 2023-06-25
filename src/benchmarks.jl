@@ -2,53 +2,54 @@ module benchmarks
 
 export run_command
 
-function build_program(file::AbstractString, lang::Symbol)
-    if lang == :rust
-        # Build Rust program
-        cmd = `rustc $file`
-        run(cmd)
-    elseif lang == :go
-        # Build Go program
-        cmd = `go build $file`
-        run(cmd)
-    else
-        error("Unsupported language: $lang")
-    end
+function run_rust()
+    # Specify the path to hello_world.rs
+    rust_file = joinpath(@__DIR__, "rust", "hello_world.rs")
+
+    # Build Rust program
+    cmd = `rustc $rust_file`
+    run(cmd)
+    
+    # Execute Rust program
+    cmd = `./hello_world`
+    run(cmd)
 end
 
-function execute_program(file::AbstractString, lang::Symbol)
-    if lang == :rust || lang == :go
-        # Execute Rust or Go program
-        cmd = `./hello_world`
-        run(cmd)
-    elseif lang == :python
-        # Execute Python program
-        cmd = `python $file`
-        run(cmd)
-    elseif lang == :julia
-        # Execute Julia program
-        cmd = `julia $file`
-        run(cmd)
-    else
-        error("Unsupported language: $lang")
-    end
+function run_go()
+    # Specify the path to hello_world.go
+    go_file = joinpath(@__DIR__, "go", "hello_world.go")
+    
+    # Build Go program
+    cmd = `go build $go_file`
+    run(cmd)
+    
+    # Execute Go program
+    cmd = `./hello_world`
+    run(cmd)
 end
 
-function run_language(lang::Symbol, file::AbstractString)
-    build_program(file, lang)
-    execute_program(file, lang)
+function run_python()
+    # Specify the path to hello_world.py
+    python_file = joinpath(@__DIR__, "python", "hello_world.py")
+    
+    # Execute Python program
+    cmd = `python $python_file`
+    run(cmd)
+end
+
+function run_julia()
+    # Specify the path to hello_world.jl
+    julia_file = joinpath(@__DIR__, "julia", "hello_world.jl")
+    
+    # Execute Julia program
+    cmd = `julia $julia_file`
+    run(cmd)
 end
 
 function run_command()
-    language_folders = ["rust", "go", "python", "julia"]
-    
-    for lang in language_folders
-        files = readdir(joinpath(@__DIR__, lang))
-        for file in files
-            file_path = joinpath(@__DIR__, lang, file)
-            @time run_language(Symbol(lang), file_path)
-        end
-    end
+    # Run benchmarks
+    @time run_rust()
+    @time run_go()
+    @time run_python()
+    @time run_julia()
 end
-
-end  # module benchmarks
