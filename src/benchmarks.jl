@@ -4,26 +4,34 @@ export run_command
 
 function build_program(file::AbstractString, lang::Symbol)
     if lang == :rust
+        # Build Rust program
         cmd = `rustc $file`
+        run(cmd)
     elseif lang == :go
+        # Build Go program
         cmd = `go build $file`
+        run(cmd)
     else
         error("Unsupported language: $lang")
     end
-    run(cmd)
 end
 
 function execute_program(file::AbstractString, lang::Symbol)
     if lang == :rust || lang == :go
-        cmd = `./$file`
+        # Execute Rust or Go program
+        cmd = `./hello_world`
+        run(cmd)
     elseif lang == :python
+        # Execute Python program
         cmd = `python $file`
+        run(cmd)
     elseif lang == :julia
+        # Execute Julia program
         cmd = `julia $file`
+        run(cmd)
     else
         error("Unsupported language: $lang")
     end
-    run(cmd)
 end
 
 function run_language(lang::Symbol, file::AbstractString)
