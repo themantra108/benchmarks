@@ -1,4 +1,4 @@
-module benchmarks
+module Benchmarks
 
 # Write your package code here.
 # benchmarks.jl
@@ -34,12 +34,14 @@ function run_julia()
     cmd = `julia hello_world.jl`
     run(cmd)
 end
-
-# Run benchmarks
+function run_command()
+    # Run benchmarks
 @time run_rust()
 @time run_go()
 @time run_python()
 @time run_julia()
+end
+
 
 
 end
