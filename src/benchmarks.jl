@@ -32,6 +32,7 @@ function run_python()
 end
 
 function run_julia()
+    julia_file = joinpath(@__DIR__, "hello_world.jl")
     # Execute Julia program
     cmd = `julia hello_world.jl`
     run(cmd)
