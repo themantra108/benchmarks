@@ -26,15 +26,16 @@ function run_go()
 end
 
 function run_python()
+    python_file = joinpath(@__DIR__, "hello_world.py")
     # Execute Python program
-    cmd = `python hello_world.py`
+    cmd = `python $python_file`
     run(cmd)
 end
 
 function run_julia()
     julia_file = joinpath(@__DIR__, "hello_world.jl")
     # Execute Julia program
-    cmd = `julia hello_world.jl`
+    cmd = `julia $julia_file`
     run(cmd)
 end
 
