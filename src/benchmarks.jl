@@ -1,5 +1,5 @@
 module benchmarks
-
+export run_command
 # Write your package code here.
 # benchmarks.jl
 
