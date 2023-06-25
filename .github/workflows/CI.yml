@@ -34,7 +34,7 @@ jobs:
       - uses: julia-actions/julia-buildpkg@v1
       # - uses: julia-actions/julia-runtest@v1
       - name: Compile programs
-        run: julia --project=src -e 'include("compile.jl")'
+        run: julia --project=. -e 'include("compile.jl")'
 
       - name: Run benchmark
-        run: julia --project=src -e 'include("benchmark.jl")'
+        run: julia --project=. -e 'include("benchmark.jl")'
